@@ -77,14 +77,15 @@ export const reducer = combineReducers( {
 	wordads
 } );
 
-const middleware = [ thunkMiddleware, noticesMiddleware ];
+let middleware = [ thunkMiddleware, noticesMiddleware ];
 
 if ( typeof window === 'object' ) {
-	// Browser-specific middlewares
-	middleware.push(
-		require( './document-head/middleware' ),
-		require( './analytics/middleware.js' ).analyticsMiddleware
-	);
+	middleware = [,
+		...middleware,
+		require( 'lib/screen-title' ).screenTitleMiddleware,
+		require( './analytics/middleware.js' ).analyticsMiddleware,
+		require( './wp-api/middleware.js' ).wpApiMiddleware
+	];
 }
 
 let createStoreWithMiddleware = applyMiddleware.apply( null, middleware );
