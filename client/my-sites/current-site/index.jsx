@@ -1,13 +1,13 @@
 /**
  * External dependencies
  */
-var React = require( 'react' ),
+const React = require( 'react' ),
 	debug = require( 'debug' )( 'calypso:my-sites:current-site' );
 
 /**
  * Internal dependencies
  */
-var AllSites = require( 'my-sites/all-sites' ),
+const AllSites = require( 'my-sites/all-sites' ),
 	analytics = require( 'lib/analytics' ),
 	Button = require( 'components/button' ),
 	Card = require( 'components/card' ),
@@ -86,13 +86,19 @@ module.exports = React.createClass( {
 	},
 
 	getDomainExpirationNotices: function() {
-		let domainStore = this.state.domainsStore.getBySite( this.getSelectedSite().ID ),
+		const domainStore = this.state.domainsStore.getBySite( this.getSelectedSite().ID ),
 			domains = domainStore && domainStore.list || [];
+
 		return (
 			<DomainWarnings
 				selectedSite={ this.getSelectedSite() }
 				domains={ domains }
-				ruleWhiteList={ [ 'expiredDomains', 'expiringDomains' ] } />
+				ruleWhiteList={ [
+					'expiredDomainsCanManage',
+					'expiringDomainsCanManage',
+					'expiredDomainsCannotManage',
+					'expiringDomainsCannotManage'
+				] } />
 		);
 	},
 
