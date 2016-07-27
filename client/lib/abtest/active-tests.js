@@ -81,5 +81,13 @@ module.exports = {
 		},
 		defaultVariation: 'disabled',
 		allowExistingUsers: false,
-	}
+	},
+	plansWording: {
+		datestamp: '20160727',
+		variations: {
+			originalWording: 50,
+			targetedWording: 50,
+		},
+		defaultVariation: 'originalWording'
+	},
 };
