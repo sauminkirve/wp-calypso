@@ -210,7 +210,7 @@ const tours = {
 	},
 	design: {
 		meta: {
-			version: '20160717',
+			version: '20160727',
 			description: 'Theme Showcase listing',
 			path: '/design',
 			context: ( state ) => config.isEnabled( 'guided-tours/design' ) && isDesktop() && isNewUser( state ),
@@ -264,8 +264,8 @@ const tours = {
 	},
 	theme: {
 		meta: {
-			version: '20160717',
-			description: 'Theme Showcase listing',
+			version: '20160727',
+			description: 'Theme Sheet tour',
 			path: '/theme',
 			context: ( state ) => config.isEnabled( 'guided-tours/theme' ) && isDesktop() && isNewUser( state ),
 		},
