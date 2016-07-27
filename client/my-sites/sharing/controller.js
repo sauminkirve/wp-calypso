@@ -6,6 +6,8 @@ var page = require( 'page' ),
 	React = require( 'react' ),
 	i18n = require( 'i18n-calypso' );
 
+import { Provider } from 'react-redux';
+
 /**
  * Internal Dependencies
  */
@@ -31,10 +33,12 @@ module.exports = {
 		}
 
 		ReactDom.render(
-			React.createElement( Sharing, {
-				path: context.path,
-				contentComponent: context.contentComponent
-			} ),
+			React.createElement( Provider, { store: context.store },
+				React.createElement( Sharing, {
+					path: context.path,
+					contentComponent: context.contentComponent
+				} )
+			),
 			document.getElementById( 'primary' )
 		);
 	},
