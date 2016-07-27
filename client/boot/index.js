@@ -27,6 +27,7 @@ var config = require( 'config' ),
 	abtest = abtestModule.abtest,
 	getSavedVariations = abtestModule.getSavedVariations,
 	switchLocale = require( 'lib/i18n-utils/switch-locale' ),
+	localeVariants = require( 'lib/i18n-utils/locale-variants' ),
 	analytics = require( 'lib/analytics' ),
 	route = require( 'lib/route' ),
 	user = require( 'lib/user' )(),
@@ -161,6 +162,7 @@ function boot() {
 		localeSlug = user.get().localeSlug;
 		if ( localeSlug ) {
 			switchLocale( localeSlug );
+			localeVariants.init();
 		}
 	}
 	// Set the locale for the current user
@@ -168,6 +170,7 @@ function boot() {
 		localeSlug = user.get().localeSlug;
 		if ( localeSlug ) {
 			switchLocale( localeSlug );
+			localeVariants.init();
 		}
 	} );
 
