@@ -40,6 +40,8 @@
 		"guided-tours": true,
 		"guided-tours/main": false,
 		"guided-tours/themes": true,
+		"guided-tours/design": true,
+		"guided-tours/theme": true,
 		"help": true,
 		"jetpack/connect": true,
 		"jetpack/sso": true,

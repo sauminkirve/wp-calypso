@@ -208,6 +208,112 @@ const tours = {
 			type: 'FinishStep',
 		},
 	},
+	design: {
+		meta: {
+			version: '20160717',
+			description: 'Theme Showcase listing',
+			path: '/design',
+			context: ( state ) => config.isEnabled( 'guided-tours/design' ) && isDesktop() && isNewUser( state ),
+		},
+		init: {
+			text: 'From this page you can change the design of your site. Want to see how to search for your ideal style?',
+			type: 'FirstStep',
+			placement: 'right',
+			next: 'filter',
+		},
+		filter: {
+			text: 'Do you want to see only free themes? Try changing to free here.',
+			type: 'ActionStep',
+			target: 'themes-tier-dropdown',
+			placement: 'above',
+			continueIf: state => {
+				const params = getQueryParams( state );
+				return params && params.tier === 'free';
+			},
+			arrow: 'bottom-right',
+			next: 'search',
+		},
+		search: {
+			text: 'Search for a specific feature, style or theme here. Try something — for example “business”.',
+			type: 'ActionStep',
+			target: '.themes__search-card .search-open__icon',
+			placement: 'below',
+			continueIf: state => {
+				const params = getQueryParams( state );
+				return params && params.search && params.search.length && ! isFetchingNextPage( state ) && getThemesList( state ).length > 0;
+			},
+			arrow: 'top-left',
+			next: 'theme-options',
+		},
+		'theme-options': {
+			text: 'From here you can access all the theme options.',
+			type: 'ActionStep',
+			target: '.theme__more-button',
+			placement: 'below',
+			arrow: 'top-left',
+			next: 'customize',
+		},
+		customize: {
+			text: 'To customize further the design you have chosen, click on customize.',
+			type: 'ActionStep',
+			target: '.current-theme__customize',
+			placement: 'below',
+			arrow: 'top-left',
+			showInContext: state => getSelectedSite( state ) !== null,
+		},
+	},
+	theme: {
+		meta: {
+			version: '20160717',
+			description: 'Theme Showcase listing',
+			path: '/theme',
+			context: ( state ) => config.isEnabled( 'guided-tours/theme' ) && isDesktop() && isNewUser( state ),
+		},
+		init: {
+			text: 'This page shows all the details about a specific theme design. Can I show you around?',
+			type: 'FirstStep',
+			placement: 'right',
+			next: 'live-preview',
+		},
+		'live-preview': {
+			text: 'Here you can see the design live.',
+			type: 'ActionStep',
+			placement: 'below',
+			target: 'theme-sheet-preview',
+			showInContext: state => getSectionName( state ) === 'theme',
+			arrow: 'top-left',
+			next: 'close-preview',
+		},
+		'close-preview': {
+			target: '.web-preview.is-visible [data-tip-target="web-preview__close"]',
+			arrow: 'left-top',
+			type: 'ActionStep',
+			placement: 'beside',
+			icon: 'cross-small',
+			text: "This is the live demo. Take a look around! Then tap here to close.",
+			showInContext: state => isPreviewShowing( state ),
+			continueIf: state => ! isPreviewShowing( state ),
+			next: 'pick-activate',
+		},
+		'pick-activate': {
+			text: 'This will activate the design you’re currently seeing on your site.',
+			type: 'BasicStep',
+			arrow: 'top-left',
+			placement: 'below',
+			target: '.theme__sheet-primary-button',
+			showInContext: state => getSectionName( state ) === 'theme',
+			next: 'back-to-list',
+		},
+		'back-to-list': {
+			arrow: 'left-top',
+			type: 'ActionStep',
+			target: '.theme__sheet-action-bar .header-cake__back.button',
+			placement: 'beside',
+			icon: 'arrow-left',
+			text: 'You can go back to the themes list here.',
+			continueIf: state => getSectionName( state ) === 'themes',
+		},
+	},
 	test: {
 		meta: {
 			version: '20160719',
