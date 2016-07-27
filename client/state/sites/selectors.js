@@ -5,7 +5,6 @@
  */
 import {
 	camelCase,
-	chain,
 	filter,
 	find,
 	flowRight as compose,
@@ -25,10 +24,10 @@ import {
 import createSelector from 'lib/create-selector';
 import { rawToNative as seoTitleFromRaw } from 'components/seo/meta-title-editor/mappings';
 import versionCompare from 'lib/version-compare';
-import getAttributes from 'lib/site/computed-attributes';
+import getComputedAttributes from 'lib/site/computed-attributes';
 
 /**
- * Returns a site object by its ID.
+ * Returns a normalized site object by its ID.
  *
  * @param  {Object}  state  Global state tree
  * @param  {Number}  siteId Site ID
@@ -37,10 +36,29 @@ import getAttributes from 'lib/site/computed-attributes';
 export const getSite = createSelector(
 	( state, siteId ) => {
 		const site = state.sites.items[ siteId ];
-		return site ? Object.assign( site, getAttributes( site ) ) : null;
+
+		if ( site ) {
+			Object.assign( site, getComputedAttributes( site ) );
+			site.hasConflict = isSiteConflicting( state, siteId );
+			site.slug = getSiteSlug( state, siteId );
+			site.domain = getSiteDomain( state, siteId );
+		}
+
+		return site || null;
 	},
 	( state ) => state.sites.items
 );
+
+/**
+ * Returns a raw site object by its ID.
+ *
+ * @param  {Object}  state  Global state tree
+ * @param  {Number}  siteId Site ID
+ * @return {?Object}        Site object
+ */
+export const getRawSite = ( state, siteId ) => {
+	return state.sites.items[ siteId ] || null;
+};
 
 /**
  * Returns a filtered array of WordPress.com site IDs where a Jetpack site
@@ -96,7 +114,7 @@ export function isSingleUserSite( state, siteId ) {
  * @return {?Boolean}        Whether site is a Jetpack site
  */
 export function isJetpackSite( state, siteId ) {
-	const site = getSite( state, siteId );
+	const site = getRawSite( state, siteId );
 	if ( ! site ) {
 		return null;
 	}
@@ -155,7 +173,7 @@ export function isJetpackMinimumVersion( state, siteId, version ) {
  * @return {?String}        Site slug
  */
 export function getSiteSlug( state, siteId ) {
-	const site = getSite( state, siteId );
+	const site = getRawSite( state, siteId );
 	if ( ! site ) {
 		return null;
 	}
@@ -168,6 +186,26 @@ export function getSiteSlug( state, siteId ) {
 }
 
 /**
+ * Returns the domain for a site, or null if the site is unknown.
+ *
+ * @param  {Object}  state  Global state tree
+ * @param  {Number}  siteId Site ID
+ * @return {?String}        Site domain
+ */
+export function getSiteDomain( state, siteId ) {
+	const site = getRawSite( state, siteId );
+	if ( ! site ) {
+		return null;
+	}
+
+	if ( ( site.options && site.options.is_redirect ) || isSiteConflicting( state, siteId ) ) {
+		return getSiteSlug( state, siteId );
+	}
+
+	return site.URL.replace( /^https?:\/\//, '' );
+}
+
+/**
  * Returns a site option for a site
  *
  * @param  {Object}  state  Global state tree
@@ -176,7 +214,7 @@ export function getSiteSlug( state, siteId ) {
  * @return {*}  The value of that option or null
  */
 export function getSiteOption( state, siteId, optionName ) {
-	const site = getSite( state, siteId );
+	const site = getRawSite( state, siteId );
 	if ( ! site || ! site.options ) {
 		return null;
 	}
@@ -206,7 +244,7 @@ export const getSeoTitleFormats = compose(
 	partialRight( mapValues, seoTitleFromRaw ), // raw strings to native objects
 	partialRight( mapKeys, rearg( camelCase, 1 ) ), // 1 -> key from ( value, key )
 	partialRight( get, 'options.advanced_seo_title_formats', {} ),
-	getSite
+	getRawSite
 );
 
 /**
@@ -241,7 +279,7 @@ export function getSiteByUrl( state, url ) {
  * @return {?Object}        Site's plan object
  */
 export function getSitePlan( state, siteId ) {
-	const site = getSite( state, siteId );
+	const site = getRawSite( state, siteId );
 
 	if ( ! site ) {
 		return null;
