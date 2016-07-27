@@ -5,6 +5,8 @@ var ReactDom = require( 'react-dom' ),
 	React = require( 'react' ),
 	i18n = require( 'i18n-calypso' );
 
+import { Provider } from 'react-redux';
+
 /**
  * Internal Dependencies
  */
@@ -44,19 +46,21 @@ var controller = {
 		analytics.pageView.record( baseAnalyticsPath, analyticsPageTitle );
 
 		ReactDom.render(
-			React.createElement( Pages, {
-				context: context,
-				siteID: siteID,
-				status: status,
-				sites: sites,
-				search: search,
-				trackScrollPage: trackScrollPage.bind(
-					null,
-					baseAnalyticsPath,
-					analyticsPageTitle,
-					'Pages'
-				)
-			} ),
+			React.createElement( Provider, { store: context.store },
+				React.createElement( Pages, {
+					context: context,
+					siteID: siteID,
+					status: status,
+					sites: sites,
+					search: search,
+					trackScrollPage: trackScrollPage.bind(
+						null,
+						baseAnalyticsPath,
+						analyticsPageTitle,
+						'Pages'
+					)
+				} )
+			),
 			document.getElementById( 'primary' )
 		);
 	}
