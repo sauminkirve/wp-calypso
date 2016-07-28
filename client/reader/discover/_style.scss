@@ -17,18 +17,18 @@
 		}
 	}
 
-	.gridicon {
+	.gridicon-arrow {
 		height: 12px;
 		width: 12px;
-		display: inline-block;
 		fill: $white;
 		background: $gray;
 		padding: 4px;
 		border-radius: 100%;
 		transform: rotate(180deg);
-		position: absolute;
-			top: 0;
-			left: 0;
+		position: relative;
+			top: 6px;
+		margin-right: 6px;
+
 	}
 
 	.gravatar {
