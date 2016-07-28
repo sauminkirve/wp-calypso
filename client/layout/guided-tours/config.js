@@ -260,6 +260,18 @@ const tours = {
 			placement: 'below',
 			arrow: 'top-left',
 			showInContext: state => getSelectedSite( state ) !== null,
+			next: 'finish',
+		},
+		finish: {
+			placement: 'center',
+			text: i18n.translate( "{{strong}}That's it!{{/strong}} Now that you know a few of the basics, feel free to wander around.", {
+				components: {
+					strong: <strong />,
+				}
+			} ),
+			type: 'FinishStep',
+			linkLabel: i18n.translate( 'Learn more about WordPress.com' ),
+			linkUrl: 'https://learn.wordpress.com',
 		},
 	},
 	theme: {
@@ -312,6 +324,18 @@ const tours = {
 			icon: 'arrow-left',
 			text: 'You can go back to the themes list here.',
 			continueIf: state => getSectionName( state ) === 'themes',
+			next: 'finish',
+		},
+		finish: {
+			placement: 'center',
+			text: i18n.translate( "{{strong}}That's it!{{/strong}} Now that you know a few of the basics, feel free to wander around.", {
+				components: {
+					strong: <strong />,
+				}
+			} ),
+			type: 'FinishStep',
+			linkLabel: i18n.translate( 'Learn more about WordPress.com' ),
+			linkUrl: 'https://learn.wordpress.com',
 		},
 	},
 	test: {
