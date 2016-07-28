@@ -179,6 +179,7 @@ export class WebPreview extends Component {
 
 	render() {
 		const { translate } = this.props;
+		debugger;
 
 		const className = classNames( this.props.className, 'web-preview', {
 			'is-touch': this._hasTouch,
