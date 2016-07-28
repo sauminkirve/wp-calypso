@@ -19,7 +19,7 @@ import SiteBlockStore from 'lib/reader-site-blocks';
 import SiteBlockActions from 'lib/reader-site-blocks/actions';
 import PostUtils from 'lib/posts/utils';
 import FollowButton from 'reader/follow-button';
-import * as DiscoverHelper from 'reader/discover/helper';
+import DiscoverHelper from 'reader/discover/helper';
 
 const stats = require( 'reader/stats' );
 
@@ -38,7 +38,7 @@ const PostOptions = React.createClass( {
 	},
 
 	getInitialState() {
-		const state = this.getStateFromStores();
+		var state = this.getStateFromStores();
 		state.popoverPosition = this.props.position;
 		state.showPopoverMenu = false;
 		return state;
@@ -101,11 +101,7 @@ const PostOptions = React.createClass( {
 	},
 
 	getFollowUrl( feed ) {
-		const post = this.props.post;
-		if ( DiscoverHelper.isDiscoverPost( post ) ) {
-			return DiscoverHelper.getSourceFollowUrl( post );
-		}
-		return feed ? feed.get( 'feed_URL' ) : get( post, 'site_URL' );
+		return feed ? feed.get( 'feed_URL' ) : this.props.post.site_URL;
 	},
 
 	getFeed() {
@@ -124,7 +120,7 @@ const PostOptions = React.createClass( {
 	},
 
 	_showPopoverMenu() {
-		const newState = ! this.state.showPopoverMenu;
+		var newState = ! this.state.showPopoverMenu;
 		this.setState( {
 			showPopover: false,
 			showPopoverMenu: newState
@@ -141,9 +137,9 @@ const PostOptions = React.createClass( {
 	},
 
 	editPost( closeMenu ) {
-		const post = this.props.post,
+		var post = this.props.post,
+			editUrl = '//wordpress.com/post/' + post.site_ID + '/' + post.ID + '/',
 			site = SiteStore.get( this.props.post.site_ID );
-		let editUrl = '//wordpress.com/post/' + post.site_ID + '/' + post.ID + '/';
 
 		closeMenu();
 
@@ -165,13 +161,11 @@ const PostOptions = React.createClass( {
 	},
 
 	render() {
-		const post = this.props.post,
+		var post = this.props.post,
+			triggerClasses = [ 'post-options__trigger', 'ignore-click' ],
+			isBlockPossible = false,
 			isEditPossible = PostUtils.userCan( 'edit_post', post ),
-			isDiscoverPost = DiscoverHelper.isDiscoverPost( post ),
-			isFollowable = !! this.state.followUrl;
-
-		let triggerClasses = [ 'post-options__trigger', 'ignore-click' ],
-			isBlockPossible = false;
+			isDiscoverPost = DiscoverHelper.isDiscoverPost( post );
 
 		if ( this.state.showPopoverMenu ) {
 			triggerClasses.push( 'is-triggered' );
@@ -189,9 +183,7 @@ const PostOptions = React.createClass( {
 				<span className={ triggerClasses }
 						ref="popoverMenuButton"
 						onClick={ this._showPopoverMenu }>
-					<svg className="gridicon gridicon__ellipsis" height="24" width="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-						<g><circle cx="5" cy="12" r="2"/><circle cx="19" cy="12" r="2"/><circle cx="12" cy="12" r="2"/></g>
-					</svg>
+					<svg className="gridicon gridicon__ellipsis" height="24" width="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g><circle cx="5" cy="12" r="2"/><circle cx="19" cy="12" r="2"/><circle cx="12" cy="12" r="2"/></g></svg>
 					<span className="post-options__label">{ this.translate( 'More' ) }</span>
 				</span>
 
@@ -200,12 +192,10 @@ const PostOptions = React.createClass( {
 						position={ this.state.popoverPosition }
 						context={ this.refs && this.refs.popoverMenuButton }>
 
-					<FollowButton tagName={ PopoverMenuItem } siteUrl={ this.state.followUrl } disabled={ ! isFollowable } />
+					<FollowButton tagName={ PopoverMenuItem } siteUrl={ this.state.followUrl } />
 
 					{ isEditPossible ? <PopoverMenuItem onClick={ this.editPost } className="post-options__edit has-icon">
-						<svg className="gridicon gridicon__edit" height="20" width="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-							<g><path d="M4 15v5h5l9-9-5-5-9 9zM16 3l-2 2 5 5 2-2-5-5z"/></g>
-						</svg>
+						<svg className="gridicon gridicon__edit" height="20" width="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g><path d="M4 15v5h5l9-9-5-5-9 9zM16 3l-2 2 5 5 2-2-5-5z"/></g></svg>
 						{ this.translate( 'Edit Post' ) }
 					</PopoverMenuItem> : null }
 
