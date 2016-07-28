@@ -225,12 +225,12 @@ const tours = {
 			text: 'Do you want to see only free themes? Try changing to free here.',
 			type: 'ActionStep',
 			target: 'themes-tier-dropdown',
-			placement: 'above',
+			placement: 'beside',
 			continueIf: state => {
 				const params = getQueryParams( state );
 				return params && params.tier === 'free';
 			},
-			arrow: 'bottom-right',
+			arrow: 'right-top',
 			next: 'search',
 		},
 		search: {
