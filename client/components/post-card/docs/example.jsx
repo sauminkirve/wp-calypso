@@ -8,6 +8,7 @@ import React from 'react';
  */
 import SmallPostCard from 'components/post-card/small';
 import SearchPostCard from 'components/post-card/search';
+import RefreshPostCard from 'components/post-card/index';
 import DisplayTypes from 'state/reader/posts/display-types';
 
 const smallItems = [
@@ -108,7 +109,7 @@ const searchItems = [
 			},
 			date: '1976-09-15T10:12:00Z',
 
-			excerpt: 'Amazing cat photos updated daily. Come back at three for tabbies.'
+			short_excerpt: 'Amazing cat photos updated daily. Come back at three for tabbies.'
 		},
 		site: {
 			ID: 1,
@@ -142,7 +143,70 @@ const searchItems = [
 			},
 			date: '1976-09-15T10:12:00Z',
 
-			excerpt: 'Amazing cat photos updated daily. Come back at three for tabbies.'
+		},
+		site: {
+			ID: 2,
+			title: 'My Site'
+		},
+		feed: {
+			feed_ID: 2
+		}
+	}
+];
+
+const refreshItems = [
+	{
+		post: {
+			ID: 1,
+			title: 'A refresh regular post',
+			site_ID: 1,
+			site_URL: 'http://example.com',
+			author: {
+				name: 'Sue Smith',
+				email: 'sue@example.com'
+			},
+			discussion: {
+				comment_count: 15
+			},
+			canonical_image: {
+				uri: 'https://placekitten.com/800/400',
+				width: 800,
+				height: 400
+			},
+			date: '1976-09-15T10:12:00Z',
+
+			short_excerpt: 'Tuxedo cats always looking dapper paw at beetle and eat it before it gets away but all of a sudden cat goes crazy and run around chasing their tail...'
+		},
+		site: {
+			ID: 1,
+			title: 'My Site'
+		},
+		feed: {
+			feed_ID: 1
+		}
+	},
+	{
+		post: {
+			ID: 2,
+			title: 'A refresh photo post',
+			site_ID: 2,
+			site_URL: 'http://example.com',
+			global_ID: 2,
+			display_type: DisplayTypes.PHOTO_ONLY,
+			author: {
+				name: 'Sue Smith',
+				email: 'sue@example.com'
+			},
+			discussion: {
+				comment_count: 80
+			},
+			canonical_image: {
+				uri: 'http://placekitten.com/800/400',
+				width: 800,
+				height: 400
+			},
+			date: '1976-09-15T10:12:00Z',
+
 		},
 		site: {
 			ID: 2,
@@ -175,6 +239,14 @@ const PostCards = React.createClass( {
 
 				<div>
 					{ searchItems.map( item => <SearchPostCard key={ item.post.site_ID } post={ item.post } site={ item.site } /> ) }
+				</div>
+
+				<h2>
+					<a href="/devdocs/blocks/post-card">Refresh Cards</a>
+				</h2>
+
+				<div>
+					{ refreshItems.map( item => <RefreshPostCard key={ item.post.site_ID } post={ item.post } site={ item.site } /> ) }
 				</div>
 			</div>
 		);
