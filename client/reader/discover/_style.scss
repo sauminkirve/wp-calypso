@@ -1,4 +1,4 @@
-.discover-attribution {
+.reader__card.card  .discover-attribution {
 	font-size: 13px;
 	font-family: $sans;
 	text-transform: lowercase;
@@ -55,7 +55,22 @@
 		color: #fff;
 		margin-right: 6px;
 	}
+
+	.follow-button {
+		position: relative;
+		border: none;
+		padding: 0;
+		margin: 10px 11px 0;
+		color: lighten( $gray, 10% );
+		font-size: 12px;
+		line-height: 18px;
+
+		&.is-following {
+			color: $alert-green;
+		}
+	}
 }
+
 
 .discover-visit-link {
 	background: $gray-light;
