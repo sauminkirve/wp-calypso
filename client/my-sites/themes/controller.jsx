@@ -11,6 +11,7 @@ import MultiSiteComponent from './multi-site';
 import LoggedOutComponent from './logged-out';
 import trackScrollPage from 'lib/track-scroll-page';
 import buildTitle from 'lib/screen-title/utils';
+import titleActions from 'lib/screen-title/actions';
 import { getAnalyticsData } from './helpers';
 import { makeElement } from 'my-sites/theme/controller';
 
@@ -58,6 +59,9 @@ export function singleSite( context, next ) {
 		window.scrollTo( 0, 0 );
 	}
 
+	// Set title
+	titleActions.setTitle( i18n.translate( 'Themes', { textOnly: true } ) );
+
 	context.primary = makeElement( SingleSiteComponent, Head, context.store, props );
 	next();
 }
@@ -70,6 +74,9 @@ export function multiSite( context, next ) {
 	if ( typeof window !== 'undefined' ) {
 		window.scrollTo( 0, 0 );
 	}
+
+	// Set title
+	titleActions.setTitle( i18n.translate( 'Themes', { textOnly: true } ) );
 
 	context.primary = makeElement( MultiSiteComponent, Head, context.store, props );
 	next();
